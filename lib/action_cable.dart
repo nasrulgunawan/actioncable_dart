@@ -28,14 +28,18 @@ class ActionCable {
 
   ActionCable.Connect(
     String url, {
-    Map<String, String> headers: const {},
+    Map<String, String> headers = const {},
     this.onConnected,
     this.onConnectionLost,
     this.onCannotConnect,
   }) {
     // rails gets a ping every 3 seconds
-    _socketChannel = IOWebSocketChannel.connect(url,
-        headers: headers, pingInterval: Duration(seconds: 3));
+
+    _socketChannel = IOWebSocketChannel.connect(
+      url,
+      headers: headers,
+      pingInterval: Duration(seconds: 3),
+    );
     _listener = _socketChannel.stream.listen(_onData, onError: (_) {
       this.disconnect(); // close a socket and the timer
       if (this.onCannotConnect != null) this.onCannotConnect!();
